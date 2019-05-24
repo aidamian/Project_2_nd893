@@ -1,6 +1,6 @@
 # Continuous Control Report
 
-
+### Iteration #1
 First iteration with no noise reduction reched a 24.5 average at episode 250 then plateaued at 22-23.
 ```
 First training iter at step 1010
@@ -34,6 +34,7 @@ Episode  350  Score/Max/Avg: 21.5/39.5/21.5  AvStp: 1000  [μcL1/μcL2:  3.9e-01
   Actor update:      87335
 ```
 
+### Iteration #2
 with exploration noise reduction we get similar results:
 
 ``` 
@@ -87,7 +88,15 @@ Episode  400  Score/Max/Avg:  3.5/36.9/11.3  AvStp: 1000  [μcL1/μcL2:  5.8e+00
 
 ```
 
-now with policy noise reduction (this time we introduce a weight debug monitoring procedure):
+### Iteration #3
+
+3rd iteration tests the policy noise reduction (this time we introduce a weight debug monitoring procedure).
+First, here is the training history:
+
+![policy_noise_reduction](policy_noise_reduction.png)
+
+And the actual log:
+
 ```
 First training iter at step 1010
 Episode   50  Score/Max/Avg:  6.4/13.1/ 4.1  AvStp: 1000  [μcL1/μcL2:  7.4e-04/ 6.9e-04 μaL:  2.0e-01]  
@@ -250,8 +259,5 @@ Model Critic min/max/mean/median:
   final_linear.bias:          9.5e-01 /  9.5e-01 /  9.5e-01 /  9.5e-01
   
 ```
-here is the training history:
-
-![policy_noise_reduction](policy_noise_reduction.png)
 
 
