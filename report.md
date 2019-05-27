@@ -1,9 +1,11 @@
 # Continuous Control Report
 
-### Approach 
+## Approach 
 
 This project uses both the initial DDPG approach described in ["Continuous control with deep reinforcement learning"](https://arxiv.org/pdf/1509.02971.pdf)and also the TD3 enhancement from ["Addressing Function Approximation Error in Actor-Critic Methods](https://arxiv.org/pdf/1802.09477.pdf) with a few additional tricks and full grid search.
 The `Actor` and `Critic` models are based configurable/parametrized implementation. This allows us to easily generate various grid-search patterns for the DAGs structure.
+
+### Actor
 
 So for actor the class structure is:
 
@@ -37,6 +39,7 @@ class Actor(nn.Module):
         return x
 
 ```
+### Critic
 
 And for the critic is slightly more complicated to accomodate the non-sequential graph pattern that would enable us to construct learned features for both the input state and the input action and then combine them together:
 
@@ -116,6 +119,7 @@ class Critic(nn.Module):
         x = self.final_linear(x)
         return x
 ```
+#### Initialization
 
 The initialization of the weights is also parametrized in order to allow both DDPG-style initialization `w=uniform(-1/sqrt(fan_in), 1/sqrt(fan_in))` or Glorot-uniform where the +/- limit is `sqrt(6/(fan_in+fan_out))`. 
 
@@ -135,7 +139,10 @@ def init_layers(layers, init_custom):
                 else:
                     nn.init.xavier_uniform_(layer.bias)
 ```
-The initial iteration have been designed only for exploration purposes and the later (final) ones contain the actual grid-search and solutions.
+
+## Iterations
+
+The initial experimentation iterations have been designed only for exploration purposes and the later (final) ones contain the actual grid-search and solutions. We experimented with a policy/exploration noise reduction or even episode-based elimination in order to reduce the stohasticicy at later stages of the training process.
 
 ### Iteration #1
 First iteration with no noise reduction reched a 24.5 average at episode 250 then plateaued at 22-23.
@@ -405,8 +412,7 @@ Notably is that the above architecture - with the only modification of dropping 
 
 
 
-
-## Second stage: multi worker environment
+## Second stage: employ multi-worker environment
 
 Now we re-run the whole part of the grid-search experiment in the multi-worker setting of the _Unity Reacher_ environment. 
 Using the identical architecture from the previous single-worker experiment we obtain a solution much faster (102 episodes) and more stable. This is largely due to the reduced variance caused by the collection of observations from the un-correlated multiple parallel workers.
