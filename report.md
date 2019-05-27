@@ -1,5 +1,8 @@
 # Continuous Control Report
 
+This project uses both the initial DDPG approach described in ["CONTINUOUS CONTROL WITH DEEP REINFORCEMENT LEARNING"](https://arxiv.org/pdf/1509.02971.pdf)and also the TD3 enhancement from ["Addressing Function Approximation Error in Actor-Critic Methods](https://arxiv.org/pdf/1802.09477.pdf) with a few additional tricks and full grid search.
+The initial iteration have been designed only for exploration purposes and the later (final) ones contain the actual grid-search and solutions.
+
 ### Iteration #1
 First iteration with no noise reduction reched a 24.5 average at episode 250 then plateaued at 22-23.
 ```
@@ -90,12 +93,12 @@ Episode  400  Score/Max/Avg:  3.5/36.9/11.3  AvStp: 1000  [μcL1/μcL2:  5.8e+00
 
 ### Iteration #3
 
-3rd iteration tests the policy noise reduction (this time we introduce a weight debug monitoring procedure).
+3rd iteration tests the policy noise reduction (this time we also introduce a weight debug monitoring procedure).
 First, here is the training history:
 
 ![policy_noise_reduction](policy_noise_reduction.png)
 
-And the actual log:
+And the actual log for some important milestones:
 
 ```
 First training iter at step 1010
@@ -260,4 +263,70 @@ Model Critic min/max/mean/median:
   
 ```
 
+At this point one particular important observation is the dependency of the convergence to the actual size of the replay memory.
+To be more specific the difference between memory size of `1e5` and `1e6` is between *convergence* and *non-convergence*
+From this initial exploration phase we continue with agregating multiple architectural options and we construct a grid-search procedure. Most notably, the _batch normalization_ has been included to the architectural grid-search based on [https://arxiv.org/pdf/1509.02971.pdf] 
+To summarize, 
 
+### The first grid-search results
+
+After a few iterations we run the below architecture using using the following exploration-training approach:
+1. We load 1024 randomly sampled steps
+2. We use the noisy exploratory policy to generated 10 steps
+3. For another 10 steps we generate actions and run the TD3 training procedure
+4. Repeat from step 2
+
+```
+Actor DAG:
+Actor(
+  (layers): ModuleList(
+    (0): BatchNorm1d(33, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (1): Linear(in_features=33, out_features=256, bias=False)
+    (2): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (3): ReLU()
+    (4): Linear(in_features=256, out_features=128, bias=True)
+    (5): BatchNorm1d(128, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (6): ReLU()
+  )
+  (final_linear): Linear(in_features=128, out_features=4, bias=True)
+  (final_activation): Tanh()
+)
+Critic DAG:
+Critic(
+  (final_layers): ModuleList(
+    (0): Linear(in_features=260, out_features=256, bias=True)
+    (1): ReLU()
+    (2): Linear(in_features=256, out_features=128, bias=True)
+    (3): ReLU()
+  )
+  (state_layers): ModuleList(
+    (0): Linear(in_features=33, out_features=256, bias=True)
+    (1): BatchNorm1d(256, eps=1e-05, momentum=0.1, affine=True, track_running_stats=True)
+    (2): ReLU()
+  )
+  (final_linear): Linear(in_features=128, out_features=1, bias=True)
+)
+```
+
+After 198 episodes the environment is solved with the above architecture showing that the optimal approach for the proposed TD3 procedure is to _featurize_ the state input before concatenating to the action input in the critic DAG.
+
+![solved after 198](state_process2_bn.png)
+
+```
+Starting training for 351 episodes...
+  explor_noise_reduction=False
+  policy_noise_reduction=False
+  stop_policy_noise=0
+  stop_explor_noise=0
+
+First training iter at step 522
+Episode   50  Score/M100/Avg: 12.9/13.5/ 4.6  AvStp: 1000  [μcL1/μcL2:  8.3e-04/ 7.6e-04 μaL: -1.5e-01]  t-left: 0.9 h    
+Episode  100  Score/M100/Avg: 24.1/29.1/10.0  AvStp: 1000  [μcL1/μcL2:  2.7e-03/ 2.5e-03 μaL: -5.2e-01]  t-left: 0.8 h    
+Episode  150  Score/M100/Avg: 36.8/39.5/20.7  AvStp: 1000  [μcL1/μcL2:  4.7e-03/ 4.4e-03 μaL: -1.5e+00]  t-left: 0.6 h    
+Episode  198  Score/M100/Avg: 35.6/39.5/30.1  Steps: 1000  [μcL1/μcL2:  8.3e-03/ 8.0e-03 μaL: -2.4e+00]  t:11.1s    
+Environment solved at episode 198!
+
+```
+
+Notably is that the above architecture - with the only modification of dropping the batch normalization - achieves with the TD3 algorithm much later the _solved_ state as shown in below image
+![solved without norm](state_process1_nonorm.png)
