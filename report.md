@@ -313,7 +313,7 @@ Episode  198  Score/M100/Avg: 35.6/39.5/30.1  Steps: 1000  [μcL1/μcL2:  8.3e-0
 Environment solved at episode 198!
 
 ```
-The saved actor model can be found in [models/single_state_preproc_full_noise_bn_actor_it_0000098840_ep_198_solved.policy]
+The saved actor model can be found [here](models/single_state_preproc_full_noise_bn_actor_it_0000098840_ep_198_solved.policy)
 
 #### The runner-up
 
@@ -321,7 +321,7 @@ Notably is that the above architecture - with the only modification of dropping 
 
 ![solved without norm](state_process1_nonorm.png)
 
-The policy model can be found in [models/single_state_preproc_full_noise__actor_it_0000172414_ep_345_solved.policy]
+The policy model can be found in [here](models/single_state_preproc_full_noise__actor_it_0000172414_ep_345_solved.policy)
 
 ### The grid-search result
 In order to limit the computing time we allowed
@@ -330,5 +330,7 @@ In order to limit the computing time we allowed
 
 Now we re-run the whole part of the grid-search experiment in the multi-worker setting of the _Unity Reacher_ environment. 
 Using the identical architecture from the previous single-worker experiment we obtain a solution much faster (102 episodes) and more stable. This is largely due to the reduced variance caused by the collection of observations from the un-correlated multiple parallel workers.
+
 ![multi-worker solution](multi_worker.png)
-The multi-worker trained policy can be found in [models/multi_abn_csbn_conn_f_noi_actor_it_0000051021_ep_102_solved.policy]
+
+The multi-worker trained policy can be found in models subfolder [here](models/multi_abn_csbn_conn_f_noi_actor_it_0000051021_ep_102_solved.policy)
