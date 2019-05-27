@@ -184,7 +184,15 @@ At this point one particular important observation is the dependency of the conv
 To be more specific the difference between memory size of `1e5` and `1e6` is between *convergence* and *non-convergence*
 From this initial exploration phase we continue with agregating multiple architectural options and we construct a grid-search procedure. Most notably, the _batch normalization_ has been included to the architectural grid-search based on [https://arxiv.org/pdf/1509.02971.pdf].
 
-To summarize, 
+To summarize, the grid has the following architectural options:
+
+| Parameter | Values |
+---------------------
+|Batch Norm| yes/no |
+|State feats| yes/no
+|explore noise| non-stop / stop after 300 ep|
+|policy noise| non-stop / stop after 300 ep|
+--------------------------------------------
 
 ### The first grid-search results
 
@@ -225,7 +233,9 @@ Critic(
   (final_linear): Linear(in_features=128, out_features=1, bias=True)
 )
 ```
-_in the above Critic DAG description there is a small display error as `final_layers` should appear after `state_layers` and not before._
+_Observation: in the above Critic DAG description there is a small display error as `final_layers` should appear after `state_layers` and not before._
+
+#### A solution is reached
 
 After 198 episodes the environment is solved with the above architecture showing that the optimal approach for the proposed TD3 procedure is to _featurize_ the state input before concatenating to the action input in the critic DAG.
 
@@ -246,6 +256,8 @@ Episode  198  Score/M100/Avg: 35.6/39.5/30.1  Steps: 1000  [μcL1/μcL2:  8.3e-0
 Environment solved at episode 198!
 
 ```
+
+#### The runner-up
 
 Notably is that the above architecture - with the only modification of dropping the batch normalization - reaches a solution with the TD3 algorithm much later, as shown in below image.
 
