@@ -4,6 +4,9 @@
 
 This project uses both the initial DDPG approach described in ["Continuous control with deep reinforcement learning"](https://arxiv.org/pdf/1509.02971.pdf)and also the TD3 enhancement from ["Addressing Function Approximation Error in Actor-Critic Methods](https://arxiv.org/pdf/1802.09477.pdf) with a few additional tricks and full grid search.
 The `Actor` and `Critic` models are based configurable/parametrized implementation. This allows us to easily generate various grid-search patterns for the DAGs structure.
+
+So for actor the class structure is:
+
 ```
 class Actor(nn.Module):
     def __init__(self, input_size, output_size, layers=[256, 128], init_custom=True, use_bn=True):
@@ -35,7 +38,86 @@ class Actor(nn.Module):
 
 ```
 
-The initialization of the weights is also parametrized in order to allow both DDPG-style initialization or Xavier-uniform. 
+And for the critic is slightly more complicated to accomodate the non-sequential graph pattern that would enable us to construct learned features for both the input state and the input action and then combine them together:
+
+```
+class Critic(nn.Module):
+    def __init__(self, state_size, act_size, output_size=1, leaky=False, init_custom=True,
+                 act_layers=[], 
+                 state_layers=[256], 
+                 final_layers=[256, 128],
+                 state_bn=True,
+                 other_bn=True,
+                 ):
+                 
+        ... 
+        
+        pre_units = state_size
+        if len(state_layers) > 0:
+            self.state_layers = nn.ModuleList()
+            for L in state_layers:
+                self.state_layers.append(nn.Linear(pre_units, L))
+                if state_bn:
+                    self.state_layers.append(nn.BatchNorm1d(L))
+                if leaky:
+                    self.state_layers.append(nn.LeakyReLU())
+                else:
+                    self.state_layers.append(nn.ReLU())
+                pre_units = L
+        final_state_column_size = pre_units
+
+        pre_units = act_size
+        if len(act_layers) > 0:
+            self.act_layers = nn.ModuleList()
+            for L in act_layers:
+                self.act_layers.append(nn.Linear(pre_units, L))
+                if other_bn:
+                    self.act_layers.append(nn.BatchNorm1d(L))                    
+                if leaky:
+                    self.act_layers.append(nn.LeakyReLU())
+                else:
+                    self.act_layers.append(nn.ReLU())
+                pre_units = L
+        final_action_column_size = pre_units
+            
+        pre_units = final_state_column_size + final_action_column_size
+        for L in final_layers:
+            self.final_layers.append(nn.Linear(pre_units, L))
+            if other_bn:
+                self.final_layers.append(nn.BatchNorm1d(L))                    
+            if leaky:
+                self.final_layers.append(nn.LeakyReLU())
+            else:
+                self.final_layers.append(nn.ReLU())
+            pre_units = L        
+            
+        self.final_linear = nn.Linear(pre_units, output_size)
+    
+               
+        ... 
+        
+        
+    def forward(self, state, action):
+        x_state = state
+        if hasattr(self, "state_layers"):
+            for layer in self.state_layers:
+                x_state = layer(x_state)
+            
+        x_act = action
+        if hasattr(self, "act_layers"):
+            for layer in self.act_layers:
+                x_act = layer(x_act)
+        
+        x = torch.cat((x_state, x_act), dim=1)
+        
+        for layer in self.final_layers:
+            x = layer(x)    
+        
+        x = self.final_linear(x)
+        return x
+```
+
+The initialization of the weights is also parametrized in order to allow both DDPG-style initialization `w=uniform(-1/sqrt(fan_in), 1/sqrt(fan_in))` or Glorot-uniform where the +/- limit is `sqrt(6/(fan_in+fan_out))`. 
 
 ```
 def init_layers(layers, init_custom):
@@ -323,8 +405,6 @@ Notably is that the above architecture - with the only modification of dropping 
 
 
 
-### The grid-search result
-In order to limit the computing time we allowed
 
 ## Second stage: multi worker environment
 

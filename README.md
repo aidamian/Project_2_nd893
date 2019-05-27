@@ -1,6 +1,6 @@
 # Continuous Control
 
-This repository presents the [DDPG](https://arxiv.org/pdf/1509.02971.pdf)/[TD3](https://arxiv.org/pdf/1509.02971.pdf) implementaton of the solution for *Unity Reacher* environment.
+This repository presents the [DDPG](https://arxiv.org/pdf/1509.02971.pdf) and [TD3](https://arxiv.org/pdf/1509.02971.pdf) implementaton (with a few bells and whistles) of the solution for *Unity Reacher* environment.
 
 ## The environment
 
@@ -28,3 +28,8 @@ This project is provided as a Jupyter-notebook-only source code. Here is the lis
 - Python 3
 - ML-Agents toolkit [https://github.com/Unity-Technologies/ml-agents]
 - Unity Reacher environment [https://unity3d.com/machine-learning]
+
+
+## The discussions
+
+The [report.md] file contains the full experimentation report of the project including early stages of exploration up until the most notable results from our grid-search procedure.
