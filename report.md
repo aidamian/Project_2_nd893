@@ -187,9 +187,9 @@ From this initial exploration phase we continue with agregating multiple archite
 To summarize, the grid has the following architectural options:
 
 | Parameter | Values |
----------------------
+|----|:------:|
 |Batch Norm| yes/no |
-|State feats| yes/no
+|State feats| yes/no |
 |explore noise| non-stop / stop after 300 ep|
 |policy noise| non-stop / stop after 300 ep|
 --------------------------------------------
