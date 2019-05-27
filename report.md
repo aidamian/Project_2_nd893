@@ -123,83 +123,16 @@ Model Critic min/max/mean/median:
 
 New policy noise: 0.1600
 Episode  100  Score/Max/Avg: 13.1/20.6/ 8.1  AvStp: 1000  [μcL1/μcL2:  2.9e-03/ 2.6e-03 μaL:  9.1e-02] 
-  Loaded steps:     100100
-  Train iters:       49550
-  Actor update:      24775
-Model Actor min/max/mean/median:
-  layers.0.weight:           -2.3e+00 /  2.6e+00 /  1.8e-02 /  1.5e-02
-  layers.0.bias:             -5.3e-01 /  1.1e-01 / -2.0e-01 / -1.9e-01
-  layers.2.weight:           -1.5e+00 /  9.0e-01 / -4.1e-02 / -3.0e-02
-  layers.2.bias:             -3.5e-01 /  2.9e-01 / -7.3e-02 / -6.7e-02
-  final_linear.weight:       -6.4e-01 /  6.2e-01 /  7.5e-03 /  9.2e-03
-  final_linear.bias:         -8.6e-02 /  1.4e-01 /  3.0e-02 /  3.4e-02
-Model Critic min/max/mean/median:
-  final_layers.0.weight:     -1.7e+00 /  8.9e-01 / -6.1e-02 / -4.2e-02
-  final_layers.0.bias:       -3.2e-01 /  4.0e-01 / -3.3e-03 / -2.6e-02
-  state_layers.0.weight:     -3.0e+00 /  3.3e+00 /  1.3e-02 /  1.3e-02
-  state_layers.0.bias:       -7.1e-01 /  1.6e-01 / -2.5e-01 / -2.4e-01
-  final_linear.weight:       -2.5e-01 /  2.7e-01 / -1.9e-02 / -2.7e-02
-  final_linear.bias:          4.6e-01 /  4.6e-01 /  4.6e-01 /  4.6e-01
 
 New policy noise: 0.1280
 Episode  150  Score/Max/Avg: 17.6/30.2/14.6  AvStp: 1000  [μcL1/μcL2:  4.2e-03/ 4.1e-03 μaL: -4.3e-01] 
-  Loaded steps:     150150
-  Train iters:       74571
-  Actor update:      37285
-Model Actor min/max/mean/median:
-  layers.0.weight:           -2.8e+00 /  2.7e+00 /  1.4e-02 /  1.3e-02
-  layers.0.bias:             -5.4e-01 /  1.4e-01 / -2.3e-01 / -2.3e-01
-  layers.2.weight:           -1.3e+00 /  9.5e-01 / -4.6e-02 / -3.1e-02
-  layers.2.bias:             -5.1e-01 /  3.7e-01 / -1.0e-01 / -9.4e-02
-  final_linear.weight:       -5.7e-01 /  7.0e-01 /  4.6e-04 /  6.8e-03
-  final_linear.bias:         -9.5e-02 /  2.8e-01 /  7.5e-02 /  5.9e-02
-Model Critic min/max/mean/median:
-  final_layers.0.weight:     -2.4e+00 /  1.1e+00 / -7.1e-02 / -4.6e-02
-  final_layers.0.bias:       -5.1e-01 /  4.7e-01 / -2.3e-02 / -4.5e-02
-  state_layers.0.weight:     -3.9e+00 /  4.4e+00 /  1.2e-02 /  1.3e-02
-  state_layers.0.bias:       -7.7e-01 /  2.9e-01 / -2.9e-01 / -2.9e-01
-  final_linear.weight:       -2.1e-01 /  2.9e-01 / -2.7e-02 / -3.6e-02
-  final_linear.bias:          1.0e+00 /  1.0e+00 /  1.0e+00 /  1.0e+00
 
 New policy noise: 0.1024
 Episode  200  Score/Max/Avg: 28.7/30.2/19.1  AvStp: 1000  [μcL1/μcL2:  9.6e-03/ 9.5e-03 μaL: -4.0e-01] 
-  Loaded steps:     200200
-  Train iters:       99600
-  Actor update:      49800
-Model Actor min/max/mean/median:
-  layers.0.weight:           -3.3e+00 /  3.0e+00 /  9.2e-03 /  9.6e-03
-  layers.0.bias:             -6.0e-01 /  1.5e-01 / -2.6e-01 / -2.8e-01
-  layers.2.weight:           -1.6e+00 /  1.1e+00 / -4.7e-02 / -3.2e-02
-  layers.2.bias:             -6.6e-01 /  4.2e-01 / -1.2e-01 / -1.2e-01
-  final_linear.weight:       -7.6e-01 /  7.5e-01 /  1.0e-02 /  7.0e-03
-  final_linear.bias:         -1.2e-01 /  3.5e-01 /  8.8e-02 /  6.1e-02
-Model Critic min/max/mean/median:
-  final_layers.0.weight:     -2.9e+00 /  1.4e+00 / -8.7e-02 / -5.4e-02
-  final_layers.0.bias:       -6.5e-01 /  5.7e-01 / -2.0e-02 / -5.4e-02
-  state_layers.0.weight:     -4.8e+00 /  5.7e+00 /  8.1e-03 /  8.3e-03
-  state_layers.0.bias:       -8.6e-01 /  3.1e-01 / -3.2e-01 / -3.2e-01
-  final_linear.weight:       -2.6e-01 /  3.5e-01 / -4.2e-02 / -4.9e-02
-  final_linear.bias:          1.2e+00 /  1.2e+00 /  1.2e+00 /  1.2e+00
 
 New policy noise: 0.0819
 Episode  250  Score/Max/Avg: 27.3/37.6/23.4  AvStp: 1000  [μcL1/μcL2:  1.6e-02/ 1.6e-02 μaL: -8.7e-01] 
-  Loaded steps:     250250
-  Train iters:      124621
-  Actor update:      62310
-Model Actor min/max/mean/median:
-  layers.0.weight:           -3.3e+00 /  3.4e+00 /  6.7e-03 /  9.1e-03
-  layers.0.bias:             -6.6e-01 /  2.9e-01 / -2.8e-01 / -3.0e-01
-  layers.2.weight:           -1.8e+00 /  1.5e+00 / -5.3e-02 / -3.8e-02
-  layers.2.bias:             -6.1e-01 /  4.0e-01 / -1.5e-01 / -1.5e-01
-  final_linear.weight:       -7.8e-01 /  7.1e-01 /  1.4e-02 /  1.3e-02
-  final_linear.bias:         -1.3e-01 /  3.4e-01 /  1.1e-01 /  1.2e-01
-Model Critic min/max/mean/median:
-  final_layers.0.weight:     -3.5e+00 /  1.5e+00 / -1.0e-01 / -6.1e-02
-  final_layers.0.bias:       -7.1e-01 /  8.2e-01 / -4.1e-02 / -8.1e-02
-  state_layers.0.weight:     -5.2e+00 /  6.3e+00 /  9.0e-03 /  9.3e-03
-  state_layers.0.bias:       -9.8e-01 /  3.5e-01 / -3.5e-01 / -3.5e-01
-  final_linear.weight:       -2.8e-01 /  2.5e-01 / -5.8e-02 / -6.3e-02
-  final_linear.bias:          1.7e+00 /  1.7e+00 /  1.7e+00 /  1.7e+00
+
 
 New policy noise: 0.0655
 Episode  300  Score/Max/Avg: 34.2/37.6/24.0  AvStp: 1000  [μcL1/μcL2:  3.9e-02/ 3.6e-02 μaL: -2.3e-01] 
@@ -223,23 +156,7 @@ Model Critic min/max/mean/median:
 
 New policy noise: 0.0524
 Episode  350  Score/Max/Avg: 25.3/37.6/18.8  AvStp: 1000  [μcL1/μcL2:  1.9e-01/ 1.9e-01 μaL:  4.6e+00] 
-  Loaded steps:     350350
-  Train iters:      174671
-  Actor update:      87335
-Model Actor min/max/mean/median:
-  layers.0.weight:           -4.0e+00 /  3.9e+00 /  3.5e-03 /  8.8e-03
-  layers.0.bias:             -8.2e-01 /  3.0e-01 / -3.3e-01 / -3.4e-01
-  layers.2.weight:           -2.0e+00 /  1.3e+00 / -5.9e-02 / -4.1e-02
-  layers.2.bias:             -7.7e-01 /  4.8e-01 / -1.8e-01 / -1.7e-01
-  final_linear.weight:       -8.6e-01 /  8.5e-01 /  1.7e-02 /  8.0e-03
-  final_linear.bias:         -9.8e-02 /  2.1e-01 /  6.2e-02 /  6.5e-02
-Model Critic min/max/mean/median:
-  final_layers.0.weight:     -4.5e+00 /  2.5e+00 / -1.2e-01 / -6.3e-02
-  final_layers.0.bias:       -8.5e-01 /  1.0e+00 /  1.9e-02 / -4.4e-02
-  state_layers.0.weight:     -6.3e+00 /  8.3e+00 /  3.0e-03 /  7.9e-03
-  state_layers.0.bias:       -1.1e+00 /  6.0e-01 / -4.1e-01 / -4.1e-01
-  final_linear.weight:       -5.8e-01 /  4.1e-01 / -1.0e-01 / -1.0e-01
-  final_linear.bias:          1.1e+00 /  1.1e+00 /  1.1e+00 /  1.1e+00
+
 
 New policy noise: 0.0500
 Episode  400  Score/Max/Avg: 11.5/37.6/14.4  AvStp: 1000  [μcL1/μcL2:  1.2e-01/ 1.2e-01 μaL:  3.8e+00] 
@@ -265,7 +182,8 @@ Model Critic min/max/mean/median:
 
 At this point one particular important observation is the dependency of the convergence to the actual size of the replay memory.
 To be more specific the difference between memory size of `1e5` and `1e6` is between *convergence* and *non-convergence*
-From this initial exploration phase we continue with agregating multiple architectural options and we construct a grid-search procedure. Most notably, the _batch normalization_ has been included to the architectural grid-search based on [https://arxiv.org/pdf/1509.02971.pdf] 
+From this initial exploration phase we continue with agregating multiple architectural options and we construct a grid-search procedure. Most notably, the _batch normalization_ has been included to the architectural grid-search based on [https://arxiv.org/pdf/1509.02971.pdf].
+
 To summarize, 
 
 ### The first grid-search results
@@ -307,6 +225,7 @@ Critic(
   (final_linear): Linear(in_features=128, out_features=1, bias=True)
 )
 ```
+_in the above Critic DAG description there is a small display error as `final_layers` should appear after `state_layers` and not before._
 
 After 198 episodes the environment is solved with the above architecture showing that the optimal approach for the proposed TD3 procedure is to _featurize_ the state input before concatenating to the action input in the critic DAG.
 
@@ -320,13 +239,14 @@ Starting training for 351 episodes...
   stop_explor_noise=0
 
 First training iter at step 522
-Episode   50  Score/M100/Avg: 12.9/13.5/ 4.6  AvStp: 1000  [μcL1/μcL2:  8.3e-04/ 7.6e-04 μaL: -1.5e-01]  t-left: 0.9 h    
-Episode  100  Score/M100/Avg: 24.1/29.1/10.0  AvStp: 1000  [μcL1/μcL2:  2.7e-03/ 2.5e-03 μaL: -5.2e-01]  t-left: 0.8 h    
-Episode  150  Score/M100/Avg: 36.8/39.5/20.7  AvStp: 1000  [μcL1/μcL2:  4.7e-03/ 4.4e-03 μaL: -1.5e+00]  t-left: 0.6 h    
-Episode  198  Score/M100/Avg: 35.6/39.5/30.1  Steps: 1000  [μcL1/μcL2:  8.3e-03/ 8.0e-03 μaL: -2.4e+00]  t:11.1s    
+Episode   50  Score/M100/Avg: 12.9/13.5/ 4.6  AvStp: 1000  [μcL1/μcL2:  8.3e-04/ 7.6e-04 μaL: -1.5e-01] 
+Episode  100  Score/M100/Avg: 24.1/29.1/10.0  AvStp: 1000  [μcL1/μcL2:  2.7e-03/ 2.5e-03 μaL: -5.2e-01]  
+Episode  150  Score/M100/Avg: 36.8/39.5/20.7  AvStp: 1000  [μcL1/μcL2:  4.7e-03/ 4.4e-03 μaL: -1.5e+00]  
+Episode  198  Score/M100/Avg: 35.6/39.5/30.1  Steps: 1000  [μcL1/μcL2:  8.3e-03/ 8.0e-03 μaL: -2.4e+00] 
 Environment solved at episode 198!
 
 ```
 
-Notably is that the above architecture - with the only modification of dropping the batch normalization - achieves with the TD3 algorithm much later the _solved_ state as shown in below image
+Notably is that the above architecture - with the only modification of dropping the batch normalization - reaches a solution with the TD3 algorithm much later, as shown in below image.
+
 ![solved without norm](state_process1_nonorm.png)
