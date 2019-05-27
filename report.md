@@ -1,6 +1,58 @@
 # Continuous Control Report
 
-This project uses both the initial DDPG approach described in ["CONTINUOUS CONTROL WITH DEEP REINFORCEMENT LEARNING"](https://arxiv.org/pdf/1509.02971.pdf)and also the TD3 enhancement from ["Addressing Function Approximation Error in Actor-Critic Methods](https://arxiv.org/pdf/1802.09477.pdf) with a few additional tricks and full grid search.
+### Approach 
+
+This project uses both the initial DDPG approach described in ["Continuous control with deep reinforcement learning"](https://arxiv.org/pdf/1509.02971.pdf)and also the TD3 enhancement from ["Addressing Function Approximation Error in Actor-Critic Methods](https://arxiv.org/pdf/1802.09477.pdf) with a few additional tricks and full grid search.
+The `Actor` and `Critic` models are based configurable/parametrized implementation. This allows us to easily generate various grid-search patterns for the DAGs structure.
+```
+class Actor(nn.Module):
+    def __init__(self, input_size, output_size, layers=[256, 128], init_custom=True, use_bn=True):
+        ...
+         if use_bn:
+            self.layers.append(nn.BatchNorm1d(pre_units))
+        
+        for i,L in enumerate(layers):
+            if i == 0:
+                use_bias = not use_bn
+            else:
+                use_bias = True
+            self.layers.append(nn.Linear(pre_units, L, bias=use_bias))
+            self.layers.append(nn.BatchNorm1d(L))
+            self.layers.append(nn.ReLU())
+            pre_units = L
+        self.final_linear = nn.Linear(pre_units, output_size)
+        self.final_activation = nn.Tanh()
+        self.reset_parameters()
+        return
+           
+        
+    def forward(self, x):
+        for layer in self.layers:
+            x = layer(x)
+        x = self.final_linear(x)
+        x = self.final_activation(x)
+        return x
+
+```
+
+The initialization of the weights is also parametrized in order to allow both DDPG-style initialization or Xavier-uniform. 
+
+```
+def init_layers(layers, init_custom):
+    for layer in layers:
+        if hasattr(layer,"weight"):
+            if init_custom:
+                layer.weight.data.uniform_(*hidden_init(layer))
+            else:
+                nn.init.xavier_uniform_(layer.weight)
+
+        if hasattr(layer,"bias"):
+            if layer.bias is not None:
+                if init_custom:
+                    layer.bias.data.uniform_(*hidden_init(layer))
+                else:
+                    nn.init.xavier_uniform_(layer.bias)
+```
 The initial iteration have been designed only for exploration purposes and the later (final) ones contain the actual grid-search and solutions.
 
 ### Iteration #1
@@ -181,25 +233,30 @@ Model Critic min/max/mean/median:
 ```
 
 At this point one particular important observation is the dependency of the convergence to the actual size of the replay memory.
-To be more specific the difference between memory size of `1e5` and `1e6` is between *convergence* and *non-convergence*
+To be more specific the difference between memory size of `1e5` and `1e6` is between *initial convergence* and *non-convergence*
+
+### The Grid Search
+
 From this initial exploration phase we continue with agregating multiple architectural options and we construct a grid-search procedure. Most notably, the _batch normalization_ has been included to the architectural grid-search based on [https://arxiv.org/pdf/1509.02971.pdf].
 
 To summarize, the grid has the following architectural options:
 
 | Parameter | Values |
 |----|:------:|
-|Batch Norm| yes/no |
+|Batch Norm on critic state features| yes/no |
+|Batch Norm on actor| yes/no|
+|Batch Norm on critic final layers| yes/no|
 |State feats| yes/no |
 |explore noise| non-stop / stop after 300 ep|
 |policy noise| non-stop / stop after 300 ep|
---------------------------------------------
+
 
 ### The first grid-search results
 
-After a few iterations we run the below architecture using using the following exploration-training approach:
-1. We load 1024 randomly sampled steps
-2. We use the noisy exploratory policy to generated 10 steps
-3. For another 10 steps we generate actions and run the TD3 training procedure
+After a few iterations we run the below architecture using the following exploration-training approach:
+1. We load `RANDOM_WARM_UP` (default 1024) randomly sampled steps
+2. We use the noisy exploratory policy to generate `train_every_steps` steps (default 10)
+3. For another `train_every_steps` steps we both generate actions with the noisy policy and run the TD3 training procedure
 4. Repeat from step 2
 
 ```
@@ -256,9 +313,22 @@ Episode  198  Score/M100/Avg: 35.6/39.5/30.1  Steps: 1000  [μcL1/μcL2:  8.3e-0
 Environment solved at episode 198!
 
 ```
+The saved actor model can be found in [models/single_state_preproc_full_noise_bn_actor_it_0000098840_ep_198_solved.policy]
 
 #### The runner-up
 
 Notably is that the above architecture - with the only modification of dropping the batch normalization - reaches a solution with the TD3 algorithm much later, as shown in below image.
 
 ![solved without norm](state_process1_nonorm.png)
+
+The policy model can be found in [models/single_state_preproc_full_noise__actor_it_0000172414_ep_345_solved.policy]
+
+### The grid-search result
+In order to limit the computing time we allowed
+
+## Second stage: multi worker environment
+
+Now we re-run the whole part of the grid-search experiment in the multi-worker setting of the _Unity Reacher_ environment. 
+Using the identical architecture from the previous single-worker experiment we obtain a solution much faster (102 episodes) and more stable. This is largely due to the reduced variance caused by the collection of observations from the un-correlated multiple parallel workers.
+![multi-worker solution](multi_worker.png)
+The multi-worker trained policy can be found in [models/multi_abn_csbn_conn_f_noi_actor_it_0000051021_ep_102_solved.policy]
