@@ -254,7 +254,7 @@ To summarize, the grid has the following architectural options:
 ### The first grid-search results
 
 After a few iterations we run the below architecture using the following exploration-training approach:
-1. We load `RANDOM_WARM_UP` (default 1024) randomly sampled steps
+1. We load `RANDOM_WARM_UP` (default 1024) randomly sampled steps (not using the policy DAG as described by the papers)
 2. We use the noisy exploratory policy to generate `train_every_steps` steps (default 10)
 3. For another `train_every_steps` steps we both generate actions with the noisy policy and run the TD3 training procedure
 4. Repeat from step 2
@@ -317,11 +317,11 @@ The saved actor model can be found [here](models/single_state_preproc_full_noise
 
 #### The runner-up
 
-Notably is that the above architecture - with the only modification of dropping the batch normalization - reaches a solution with the TD3 algorithm much later, as shown in below image.
+Notably is that the above architecture - with the only modification of dropping the batch normalization - reaches a solution with the TD3 algorithm much later, as shown in below image. The policy model can be found in [here](models/single_state_preproc_full_noise__actor_it_0000172414_ep_345_solved.policy)
 
 ![solved without norm](state_process1_nonorm.png)
 
-The policy model can be found in [here](models/single_state_preproc_full_noise__actor_it_0000172414_ep_345_solved.policy)
+
 
 ### The grid-search result
 In order to limit the computing time we allowed
