@@ -237,7 +237,7 @@ Episode  400  Score/Max/Avg:  3.5/36.9/11.3  AvStp: 1000  [μcL1/μcL2:  5.8e+00
 3rd iteration tests the policy noise reduction (this time we also introduce a weight debug monitoring procedure).
 First, here is the training history:
 
-![policy_noise_reduction](policy_noise_reduction.png)
+![policy_noise_reduction](img/policy_noise_reduction.png)
 
 And the actual log for some important milestones:
 
