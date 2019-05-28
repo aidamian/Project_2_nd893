@@ -488,7 +488,11 @@ Finally the simple actor and simple critic (classic approach from TD3)
 Here are the stats of the grid-search
 
 ```
-
+MODEL  EP_SOL   BEST_AVG       AVG1       AVG2       AVG3       AVG4
+3       m_cuda_ann_cdnn_f_noi     123  33.818709  10.450500  19.322760  29.714739  33.323499
+0  m_cuda_ab2_csbn_conn_f_noi     109  34.596374  11.123500  23.944288  32.813369  34.596374
+2  m_cuda_ann_csbn_conn_f_noi      88  35.153664  20.861322  28.708675  34.869729  34.964219
+1       m_cuda_ab2_cdnn_f_noi     110  35.523639  12.389467  23.244352  32.617529  35.250899
 ```
 
 And the comparison chart:
