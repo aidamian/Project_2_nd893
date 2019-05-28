@@ -509,5 +509,5 @@ It is worth to note that the best approach in terms of convergence speed is base
 
 ## Next steps
 
-The next step is to analyze potential improvement of the obvious flaws of the TD3 modifications to the DDPG algorithm and further experiment with policy/exploroation noise decay, stopping. This will be approached both based on simple eps-greedy strategy or based on more _smart_ heristics such as predefined optimization target.
+The next step is to analyze potential improvement of the obvious flaws of the TD3 modifications to the DDPG algorithm and further experiment with policy/exploroation noise decay, stopping. This will be approached both based on simple eps-greedy strategy or based on more _smart_ heristics such as adaptive noise based on predefined score target.
 
