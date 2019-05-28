@@ -453,7 +453,7 @@ Below are the actual major options proposed for this multi-worker env grid-searc
 # cobn : Critic post-state has batch-norm
 ```
 
-#### Grid 1
+#### Grid 1 results
 
 ```
                         MODEL  EP_SOL   BEST_AVG       AVG1       AVG2       AVG3       AVG4
@@ -465,7 +465,7 @@ Below are the actual major options proposed for this multi-worker env grid-searc
 5       m_cuda_ab2_cdnn_f_noi     102  35.516939  17.972500  27.464337  34.969764  35.458929
 ```
 
-#### Grid 2
+#### Grid 2 
 
 The second and final grid search explores the settings where the actor model has pre-activation BN or no BN whatsoever. For the critic options we have the vanilla TD3 architecture and also the original DDPG architecture with pre-activation BN on the state featurization column.
 
