@@ -33,3 +33,6 @@ This project is provided as a Jupyter-notebook-only source code. Here is the lis
 ## The discussions
 
 The [report.md](report.md) file contains the full experimentation report of the project including early stages of exploration up until the most notable results from our grid-search procedure.
+Here is a short peek at the grid-search results:
+
+![peek](...png)

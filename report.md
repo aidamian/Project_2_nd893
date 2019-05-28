@@ -339,6 +339,19 @@ To summarize, the grid has the following architectural options:
 |explore noise| non-stop / stop after 300 ep|
 |policy noise| non-stop / stop after 300 ep|
 
+The actual implementation of the grid-search is based on short grid-state names such as "abn" (that stands for actor-with-batch-norm).
+
+```
+  # abn  : Actor with batch-norm 
+  # ann  : Actor without any norming
+  # csbn : Critic with batch-normed featurized state
+  # cvnn : Critic with no norm on featureized state input
+  # cdbn : Critic with direct state (no featurization layer) and full batch-norm
+  # cdnn : Critic simplest version (similar to TD3 paper) - concate then fc no norm
+  # conn : Critic post-state has no normalization
+  # cobn : Critic post-state has batch-norm
+```
+
 
 ### The first grid-search results
 
@@ -385,7 +398,7 @@ _Observation: in the above Critic DAG description there is a small display error
 
 After 198 episodes the environment is solved with the above architecture showing that the optimal approach for the proposed TD3 procedure is to _featurize_ the state input before concatenating to the action input in the critic DAG.
 
-![solved after 198](state_process2_bn.png)
+![solved after 198](img/state_process2_bn.png)
 
 ```
 Starting training for 351 episodes...
@@ -408,15 +421,89 @@ The saved actor model can be found [here](models/single_state_preproc_full_noise
 
 Notably is that the above architecture - with the only modification of dropping the batch normalization - reaches a solution with the TD3 algorithm much later, as shown in below image. The policy model can be found in [here](models/single_state_preproc_full_noise__actor_it_0000172414_ep_345_solved.policy)
 
-![solved without norm](state_process1_nonorm.png)
-
+![solved without norm](img/state_process1_nonorm.png)
 
 
 ## Second stage: employ multi-worker environment
 
+### Summary
+
 Now we re-run the whole part of the grid-search experiment in the multi-worker setting of the _Unity Reacher_ environment. 
 Using the identical architecture from the previous single-worker experiment we obtain a solution much faster (102 episodes) and more stable. This is largely due to the reduced variance caused by the collection of observations from the un-correlated multiple parallel workers.
 
-![multi-worker solution](multi_worker.png)
+![multi-worker solution](img/multi_worker.png)
 
 The multi-worker trained policy can be found in models subfolder [here](models/multi_abn_csbn_conn_f_noi_actor_it_0000051021_ep_102_solved.policy)
+
+### Analysis of grid search using multi-worker env
+
+We rand a adaptive grid search methodology, first restricting the grid-space to 6 options and then re-narrowing the grid-space to 4 options.
+At each iteration of the grid search we manually set the random seed for `numpy`, `random` and `torch` 
+Below are the actual major options proposed for this multi-worker env grid-search (derived from the initial options previosly presented:
+```
+# ab1  : Actor with batch-norm only on state input
+# ab2  : Actor with batch-norm only on pre-activations
+# ab3  : Actor with all batch-norms
+# ann  : Actor without any norming
+# csbn : Critic with batch-normed featurized state
+# cvnn : Critic with no norm on featureized state input
+# cdbn : Critic with direct state (no featurization layer) and full batch-norm
+# cdnn : Critic simplest version (similar to TD3 paper) - concate then fc no norm
+# conn : Critic post-state has no normalization
+# cobn : Critic post-state has batch-norm
+```
+
+#### Grid 1
+
+```
+                        MODEL  EP_SOL   BEST_AVG       AVG1       AVG2       AVG3       AVG4
+0       m_cuda_ab3_cdbn_f_noi       0   1.980370   0.974758   1.426218   1.791180   1.956805
+3       m_cuda_ab2_cdbn_f_noi       0   2.419435   1.542839   1.823669   2.368325   2.419435
+2       m_cuda_ab3_cdnn_f_noi     127  34.315164   7.236935  18.045978  28.607939  33.837529
+1  m_cuda_ab3_csbn_conn_f_noi     112  34.587639  11.039290  22.966323  32.151254  34.585609
+4  m_cuda_ab2_csbn_conn_f_noi     104  34.904369  16.149774  26.696577  34.855264  34.556034
+5       m_cuda_ab2_cdnn_f_noi     102  35.516939  17.972500  27.464337  34.969764  35.458929
+```
+
+#### Grid 2
+
+The second and final grid search explores the settings where the actor model has pre-activation BN or no BN whatsoever. For the critic options we have the vanilla TD3 architecture and also the original DDPG architecture with pre-activation BN on the state featurization column.
+
+Actor with BN pre-activation & critic with simple TD3 architecture
+
+![img/ab2_cdnn.png](img/ab2_cdnn.png)
+
+Actor with BN pre-activation & critic with state featurization and BN on state-features pre-activation
+
+![img/ab2_csbn.png](img/ab2_csbn.png)
+
+Simple actor & critic with state featurization and BN on state-features pre-activation
+
+![img/ann_csbn.png](img/ann_csbn.png)
+
+Finally the simple actor and simple critic (classic approach from TD3)
+
+![img/ann_cdnn.png](img/ann_cdnn.png)
+
+Here are the stats of the grid-search
+
+```
+
+```
+
+And the comparison chart:
+
+![img/multi_grid2.png](img/multi_grid2.png)
+
+
+#### Grid search conclusions
+
+As it can be observed from the results of the grid search all models behave pretty much the same with the exception of the agents where the critics have the proposed TD3 (concatenate the inputs at beginning of the DAG) and all the pre-activations are batch-normed. 
+In terms of convergence time the _slowest_ architecture is the classic one (TD3) where both critic and actor have strigh-forward sequential architectures with no batch-norming.
+It is worth to note that the best approach in terms of convergence speed is based on a simple no-norm Actor and a Critic that follows the DDPG approach with post-linear BN of the state-input.
+
+
+## Next steps
+
+The next step is to analyze potential improvement of the obvious flaws of the TD3 modifications to the DDPG algorithm and further experiment with policy/exploroation noise decay, stopping. This will be approached both based on simple eps-greedy strategy or based on more _smart_ heristics such as predefined optimization target.
+
